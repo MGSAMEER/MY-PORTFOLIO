@@ -12,12 +12,44 @@ import {
   RefreshCcw,
   Send,
 } from "lucide-react";
+import Image from "next/image";
+
+interface Comment {
+  id: number;
+  name?: string;
+  username?: string;
+  comment: string;
+  image_url?: string;
+  likes?: number;
+  created_at: string;
+  is_pinned?: boolean;
+  liked_by_admin?: boolean;
+  replies?: Array<{
+    username: string;
+    message: string;
+    created_at: string;
+  }>;
+}
 
 export default function AdminCommentsPage() {
-  const [comments, setComments] = useState<any[]>([]);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [replyText, setReplyText] = useState<Record<number, string>>({});
 
+  const fetchComments = async () => {
+    setLoading(true);
+
+    const { data } = await supabase
+      .from("comments")
+      .select("*")
+      .order("is_pinned", { ascending: false })
+      .order("created_at", { ascending: false });
+
+    setComments(data || []);
+    setLoading(false);
+  };
+
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     fetchComments();
 
@@ -41,18 +73,8 @@ export default function AdminCommentsPage() {
     };
   }, []);
 
-  const fetchComments = async () => {
-    setLoading(true);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
-    const { data } = await supabase
-      .from("comments")
-      .select("*")
-      .order("is_pinned", { ascending: false })
-      .order("created_at", { ascending: false });
-
-    setComments(data || []);
-    setLoading(false);
-  };
 
   const deleteComment = async (id: number) => {
     const result = await Swal.fire({
@@ -246,14 +268,18 @@ export default function AdminCommentsPage() {
                         </p>
 
                         {comment.image_url && (
-                          <img
+                          <Image
                             src={comment.image_url}
-                            className="rounded-2xl border border-white/10 w-full max-w-full sm:max-w-[260px] object-cover mb-4"
+                            alt={comment.name ?? comment.username ?? "Comment image"}
+                            width={400}
+                            height={300}
+                            className="rounded-2xl border border-white/10"
+                            style={{ objectFit: "cover", maxWidth: "260px", width: "100%", height: "auto" }}
                           />
                         )}
 
                         <div className="flex flex-wrap items-center gap-3 text-[11px] text-white/35">
-                          <span>{comment.likes || 0} likes</span>
+                          <span>{(comment.likes ?? 0)} likes</span>
 
                           <span>
                             {new Date(comment.created_at).toLocaleDateString()}
@@ -267,12 +293,12 @@ export default function AdminCommentsPage() {
                           onClick={() =>
                             addLike(
                               comment.id,
-                              comment.likes,
-                              comment.liked_by_admin,
+                              comment.likes ?? 0,
+                              comment.liked_by_admin ?? false,
                             )
                           }
                           className={`w-11 h-11 rounded-2xl border flex items-center justify-center transition ${
-                            comment.liked_by_admin
+                            comment.liked_by_admin ?? false
                               ? "bg-pink-500/20 border-pink-500/30 text-pink-300"
                               : "bg-white/5 border-white/10 hover:bg-white/10"
                           }`}
@@ -280,17 +306,17 @@ export default function AdminCommentsPage() {
                           <Heart
                             size={15}
                             fill={
-                              comment.liked_by_admin ? "currentColor" : "none"
+                              (comment.liked_by_admin ?? false) ? "currentColor" : "none"
                             }
                           />
                         </button>
 
                         <button
                           onClick={() =>
-                            togglePin(comment.id, comment.is_pinned)
+                            togglePin(comment.id, comment.is_pinned ?? false)
                           }
                           className={`w-11 h-11 rounded-2xl border flex items-center justify-center transition ${
-                            comment.is_pinned
+                            comment.is_pinned ?? false
                               ? "bg-yellow-500/20 border-yellow-500/30 text-yellow-300"
                               : "bg-white/5 border-white/10 hover:bg-white/10"
                           }`}

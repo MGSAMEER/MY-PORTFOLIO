@@ -8,8 +8,15 @@ import Sidebar from "@/app/admin/Sidebar";
 import { supabase } from "@/lib/supabase";
 import Swal from "sweetalert2";
 
+interface Certificate {
+  id: number;
+  title: string;
+  image_url?: string;
+  created_at: string;
+}
+
 export default function CertificatesPage() {
-  const [certificates, setCertificates] = useState<any[]>([]);
+   const [certificates, setCertificates] = useState<Certificate[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [open, setOpen] = useState(false);
@@ -21,40 +28,40 @@ export default function CertificatesPage() {
 
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    fetchCertificates();
+   const fetchCertificates = async () => {
+     const { data } = await supabase
+       .from("certificates")
+       .select("*")
+       .order("created_at", {
+         ascending: true,
+       });
 
-    const channel = supabase
-      .channel("certificates-realtime")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "certificates",
-        },
-        () => {
-          fetchCertificates();
-        },
-      )
-      .subscribe();
+      setCertificates((data || []) as Certificate[]);
+     setLoading(false);
+   };
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, []);
+   useEffect(() => {
+     fetchCertificates();
 
-  const fetchCertificates = async () => {
-  const { data } = await supabase
-    .from("certificates")
-    .select("*")
-    .order("created_at", {
-      ascending: true,
-    });
+     const channel = supabase
+       .channel("certificates-realtime")
+       .on(
+         "postgres_changes",
+         {
+           event: "*",
+           schema: "public",
+           table: "certificates",
+         },
+         () => {
+           fetchCertificates();
+         },
+       )
+       .subscribe();
 
-  setCertificates(data || []);
-  setLoading(false);
-};
+     return () => {
+       supabase.removeChannel(channel);
+     };
+   }, []);
 
   const resetForm = () => {
     setTitle("");
@@ -116,7 +123,7 @@ export default function CertificatesPage() {
 setOpen(false);
 resetForm();
 
-fetchCertificates
+   fetchCertificates();
   };
 
   const handleDelete = async (id: number) => {
@@ -161,9 +168,9 @@ fetchCertificates
     }
   };
 
-  const handleEdit = (item: any) => {
+   const handleEdit = (item: Certificate) => {
     setTitle(item.title);
-    setPreview(item.image_url);
+     setPreview(item.image_url ?? "");
     setEditId(item.id);
     setOpen(true);
   };

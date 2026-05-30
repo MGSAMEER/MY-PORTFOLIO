@@ -13,6 +13,24 @@ import {
   TrendingUp,
 } from "lucide-react";
 
+interface Comment {
+  id: number;
+  name?: string;
+  username?: string;
+  comment: string;
+  image_url?: string;
+  likes?: number;
+  created_at: string;
+  is_pinned?: boolean;
+  liked_by_admin?: boolean;
+  replies?: Array<{
+    username: string;
+    message: string;
+    created_at: string;
+  }>;
+}
+
+
 export default function DashboardPage() {
   const router = useRouter();
 
@@ -25,26 +43,26 @@ export default function DashboardPage() {
     pinned: 0,
   });
 
-  const [recentComments, setRecentComments] = useState<any[]>([]);
+  const [recentComments, setRecentComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
+   const checkAuth = async () => {
+     const {
+       data: { session },
+     } = await supabase.auth.getSession();
 
-  const checkAuth = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
+     if (!session) {
+       router.replace("/admin/login");
+       return;
+     }
 
-    if (!session) {
-      router.replace("/admin/login");
-      return;
-    }
+     setAuthorized(true);
+     fetchDashboard();
+   };
 
-    setAuthorized(true);
-    fetchDashboard();
-  };
+   useEffect(() => {
+     checkAuth();
+   }, []);
 
   const fetchDashboard = async () => {
     try {
@@ -100,7 +118,7 @@ export default function DashboardPage() {
         pinned: pinnedRes.count || 0,
       });
 
-      setRecentComments(recentCommentsRes.data || []);
+       setRecentComments((recentCommentsRes.data || []) as Comment[]);
     } catch (err) {
       console.error("Dashboard fetch error:", err);
     }
