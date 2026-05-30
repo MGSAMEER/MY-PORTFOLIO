@@ -7,6 +7,20 @@ import {
   ChevronDown,
   ChevronUp,
 } from 'lucide-react'
+import {
+  SiReact,
+  SiTypescript,
+  SiJavascript,
+  SiTailwindcss,
+  SiNodedotjs,
+  SiExpress,
+  SiPython,
+  SiMongodb,
+  SiMysql,
+  SiGit,
+  SiDocker,
+  SiFigma,
+} from 'react-icons/si'
 import usePortfolio from '@/hooks/usePortfolio'
 import PortfolioCard from './PortfolioCard'
 
@@ -37,9 +51,59 @@ export default function PortfolioShowcase() {
   const [showAllProjects, setShowAllProjects] =
     useState(false)
 
+  const fallbackProjects = [
+    {
+      id: 'fallback-pulse-events',
+      title: 'Pulse Events',
+      description:
+        'A fast, modern event discovery platform for concerts, tech conferences, workshops, and local experiences with streamlined browsing and a high-performance UI.',
+      live_url:
+        'https://pulse-event-l7zk.vercel.app/',
+    },
+    {
+      id: 'fallback-finance-ai',
+      title: 'Finance AI',
+      description:
+        'An AI-powered financial insights dashboard that helps users track income, expenses, savings, and spending trends with an interactive analytics experience.',
+      live_url:
+        'https://finance-ai-theta-ten.vercel.app/',
+    },
+    {
+      id: 'fallback-pc-recommendation',
+      title: 'PC Recommendation System',
+      description:
+        'A personalized PC recommendation platform that suggests optimized builds based on budget, usage, and performance needs using AI-backed guidance.',
+      live_url:
+        'https://pc-recommendation-system-frontend-psi.vercel.app/',
+    },
+  ]
+
+  const fallbackTechStacks = [
+    { id: 'frontend-react', name: 'React.js', icon: <SiReact /> },
+    { id: 'frontend-typescript', name: 'TypeScript', icon: <SiTypescript /> },
+    { id: 'frontend-javascript', name: 'JavaScript', icon: <SiJavascript /> },
+    { id: 'frontend-tailwind', name: 'Tailwind CSS', icon: <SiTailwindcss /> },
+    { id: 'backend-node', name: 'Node.js', icon: <SiNodedotjs /> },
+    { id: 'backend-express', name: 'Express.js', icon: <SiExpress /> },
+    { id: 'backend-python', name: 'Python', icon: <SiPython /> },
+    { id: 'database-mongodb', name: 'MongoDB', icon: <SiMongodb /> },
+    { id: 'database-sql', name: 'SQL', icon: <SiMysql /> },
+    { id: 'tools-git', name: 'Git & GitHub', icon: <SiGit /> },
+    { id: 'tools-docker', name: 'Docker', icon: <SiDocker /> },
+    { id: 'tools-design', name: 'Figma / Canva', icon: <SiFigma /> },
+  ]
+
+  const sourceProjects =
+    projects.length > 0 ? projects : fallbackProjects
+
+  const sourceTechStacks =
+    techStacks.length > 0
+      ? techStacks
+      : fallbackTechStacks
+
   const displayedProjects = showAllProjects
-    ? projects
-    : projects.slice(0, 3)
+    ? sourceProjects
+    : sourceProjects.slice(0, 3)
 
   return (
     <>
@@ -92,12 +156,12 @@ export default function PortfolioShowcase() {
           className="text-center mb-8"
         >
           <h1 className="text-3xl md:text-5xl font-bold mb-3">
-            Portfolio Showcase
+            Projects
           </h1>
 
           <p className="text-white/55 max-w-xl mx-auto text-sm md:text-base">
-            Explore my journey through projects,
-            certifications, and technical expertise.
+            A curated look at my AI-powered, full-stack, and scalable product
+            work.
           </p>
         </motion.div>
 
@@ -201,7 +265,7 @@ export default function PortfolioShowcase() {
 
                 {/* SEE MORE / LESS */}
                 {!loading &&
-                  projects.length > 3 && (
+                  sourceProjects.length > 3 && (
                     <motion.div
                       layout
                       transition={{
@@ -318,57 +382,63 @@ export default function PortfolioShowcase() {
             )}
 
             {/* TECH STACK */}
-            {/* TECH STACK */}
-{activeTab === 'techstack' && (
-  <div className="min-h-[360px] flex justify-center">
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 max-w-5xl w-full">
-      {!loading &&
-        techStacks?.map((item, index) => (
-          <motion.div
-            key={item.id}
-            initial={{
-              opacity: 0,
-              scale: 0.9,
-              y: 20,
-            }}
-            whileInView={{
-              opacity: 1,
-              scale: 1,
-              y: 0,
-            }}
-            transition={{
-              duration: 0.45,
-              delay: index * 0.04,
-            }}
-            whileHover={{
-              y: -5,
-              scale: 1.04,
-            }}
-            className="group rounded-[24px] border border-white/10 bg-white/[0.04] backdrop-blur-xl flex flex-col items-center justify-center gap-3 h-[125px] w-[125px] mx-auto"
-          >
-            <div className="relative flex items-center justify-center">
-              {/* GLOW */}
-              <div className="absolute w-[70px] h-[70px] rounded-full bg-white/20 blur-2xl opacity-0 group-hover:opacity-100 transition duration-500" />
+            {activeTab === 'techstack' && (
+              <div className="min-h-[360px] flex justify-center">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 max-w-5xl w-full">
+                  {!loading &&
+                    sourceTechStacks.map((item, index) => (
+                      <motion.div
+                        key={item.id}
+                        initial={{
+                          opacity: 0,
+                          scale: 0.9,
+                          y: 20,
+                        }}
+                        whileInView={{
+                          opacity: 1,
+                          scale: 1,
+                          y: 0,
+                        }}
+                        transition={{
+                          duration: 0.45,
+                          delay: index * 0.04,
+                        }}
+                        whileHover={{
+                          y: -5,
+                          scale: 1.04,
+                        }}
+                        className="group rounded-[24px] border border-white/10 bg-white/[0.04] backdrop-blur-xl flex flex-col items-center justify-center gap-3 h-[125px] w-[125px] mx-auto"
+                      >
+                        <div className="relative flex items-center justify-center">
+                          <div className="absolute w-[70px] h-[70px] rounded-full bg-white/20 blur-2xl opacity-0 group-hover:opacity-100 transition duration-500" />
 
-              {item.logo_url ? (
-                <img
-                  src={item.logo_url}
-                  alt={item.name}
-                  className="relative z-10 w-[56px] h-[56px] object-contain"
-                />
-              ) : (
-                <div className="relative z-10 w-[56px] h-[56px] rounded-2xl bg-white/10" />
-              )}
-            </div>
+                          {item.icon ? (
+                            <div className="relative z-10 flex h-[56px] w-[56px] items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] shadow-[0_0_30px_rgba(255,255,255,0.06)] text-white/90">
+                              <div className="text-[1.8rem] drop-shadow-[0_0_10px_rgba(255,255,255,0.18)]">
+                                {item.icon}
+                              </div>
+                            </div>
+                          ) : item.logo_url ? (
+                            <img
+                              src={item.logo_url}
+                              alt={item.name}
+                              className="relative z-10 w-[56px] h-[56px] object-contain"
+                            />
+                          ) : (
+                            <div className="relative z-10 flex h-[56px] w-[56px] items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-white/60">
+                              <div className="text-[1.35rem]">•</div>
+                            </div>
+                          )}
+                        </div>
 
-            <p className="text-[11px] text-white/80 text-center leading-tight px-2 line-clamp-1">
-              {item.name}
-            </p>
-          </motion.div>
-        ))}
-    </div>
-  </div>
-)}
+                        <p className="text-[11px] text-white/80 text-center leading-tight px-2 line-clamp-1">
+                          {item.name}
+                        </p>
+                      </motion.div>
+                    ))}
+                </div>
+              </div>
+            )}
           </motion.div>
         </AnimatePresence>
       </section>

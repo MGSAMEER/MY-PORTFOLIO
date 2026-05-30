@@ -2,8 +2,9 @@ import "./globals.css";
 import RefreshRedirect from '@/components/RefreshRedirect'
 
 export const metadata = {
-  title: "Rifqi Muhammad Aliya",
-  description: "Portfolio...",
+  title: "Sameer Kanade",
+  description:
+    "Full Stack Developer portfolio showcasing AI-powered, scalable, and impactful digital experiences.",
 };
 
 export default function RootLayout({
@@ -13,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body suppressHydrationWarning>
         <RefreshRedirect />
         {children}
         </body>

@@ -1,21 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import { motion, Variants } from 'framer-motion'
-import {
-  Send,
-  User,
-  Mail,
-  MessageSquare,
-  ArrowUpRight,
-} from 'lucide-react'
-
-import {
-  FaLinkedinIn,
-  FaInstagram,
-  FaGithub,
-  FaYoutube,
-  FaTiktok,
-} from 'react-icons/fa'
+import { Send, User, Mail, MessageSquare, ArrowUpRight } from 'lucide-react'
+import { FaLinkedinIn, FaGithub } from 'react-icons/fa'
 
 const smoothEase: [number, number, number, number] = [
   0.22,
@@ -41,32 +29,70 @@ const fieldVariants: Variants = {
 
 const socialLinks = [
   {
-    title: 'Instagram',
-    user: '@instagram',
-    icon: FaInstagram,
-    link: 'https://www.instagram.com/itsmeikky_12?igsh=ZHFpMTJ1bHQzeDAx',
-  },
-  {
-    title: 'Youtube',
-    user: '@youtube',
-    icon: FaYoutube,
-    link: 'https://youtube.com/@zettaajah?si=QRjJGD4zCQG8aIHX',
-  },
-  {
-    title: 'Github',
-    user: '@github',
+    title: 'GitHub',
+    user: '@sameer-kanade',
     icon: FaGithub,
     link: 'https://github.com/RifqiMuhammadAliya12',
   },
   {
-    title: 'TikTok',
-    user: '@tiktok',
-    icon: FaTiktok,
-    link: 'https://www.tiktok.com/@itsme.ikky_?_r=1&_t=ZS-95yAYr5PHUb',
+    title: 'LinkedIn',
+    user: 'Sameer Kanade',
+    icon: FaLinkedinIn,
+    link: 'https://www.linkedin.com/in/rifqimuhammadaliya/',
+  },
+  {
+    title: 'Email',
+    user: 'sameer.kanade.cse@gmail.com',
+    icon: Mail,
+    link: 'mailto:sameer.kanade.cse@gmail.com',
   },
 ]
 
 export default function ContactForm() {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [statusMessage, setStatusMessage] = useState('')
+
+  const handleSubmit = async () => {
+    if (!name.trim() || !email.trim() || !message.trim()) {
+      setStatus('error')
+      setStatusMessage('Please fill in all fields')
+      return
+    }
+
+    setLoading(true)
+    setStatus('idle')
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message }),
+      })
+
+      if (response.ok) {
+        setStatus('success')
+        setStatusMessage('Message sent successfully!')
+        setName('')
+        setEmail('')
+        setMessage('')
+        setTimeout(() => setStatus('idle'), 3000)
+      } else {
+        setStatus('error')
+        setStatusMessage('Failed to send message. Please try again.')
+      }
+    } catch (error) {
+      setStatus('error')
+      setStatusMessage('An error occurred. Please try again.')
+      console.error('Contact form error:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, x: -40 }}
@@ -75,7 +101,6 @@ export default function ContactForm() {
       viewport={{ once: false, amount: 0.2 }}
       className="rounded-[28px] border border-white/10 bg-white/[0.04] backdrop-blur-xl p-5 md:p-8 flex flex-col h-full"
     >
-      {/* HEADER */}
       <motion.div
         variants={fieldVariants}
         initial="hidden"
@@ -83,19 +108,26 @@ export default function ContactForm() {
         viewport={{ once: false }}
         transition={{ delay: 0.05 }}
       >
-        <h2 className="text-2xl md:text-3xl font-bold mb-3">
-          Hubungi Saya
-        </h2>
-
-        <p className="text-sm text-white/50 mb-7">
-          Feel free to reach out if you want to collaborate,
-          discuss ideas, or simply say hello.
+        <p className="text-[11px] uppercase tracking-[0.2em] text-white/45 mb-2">
+          Contact Me
         </p>
+        <h2 className="text-2xl md:text-3xl font-bold mb-3">
+          Sameer Kanade
+        </h2>
+        <p className="text-sm text-white/50 mb-5">
+          Feel free to reach out for collaborations, opportunities, or just a
+          tech discussion.
+        </p>
+        <a
+          href="mailto:sameer.kanade.cse@gmail.com"
+          className="inline-flex items-center gap-2 text-sm text-white/80 hover:text-white transition"
+        >
+          <Mail size={16} />
+          sameer.kanade.cse@gmail.com
+        </a>
       </motion.div>
 
-      {/* FORM */}
-      <div className="space-y-4">
-        {/* NAME */}
+      <div className="space-y-4 mt-6">
         <motion.div
           variants={fieldVariants}
           initial="hidden"
@@ -108,12 +140,13 @@ export default function ContactForm() {
 
             <input
               placeholder="Your Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="w-full rounded-2xl border border-white/15 bg-black/20 pl-12 pr-4 py-4 outline-none transition duration-200 focus:border-white focus:ring-1 focus:ring-white/40"
             />
           </div>
         </motion.div>
 
-        {/* EMAIL */}
         <motion.div
           variants={fieldVariants}
           initial="hidden"
@@ -126,12 +159,13 @@ export default function ContactForm() {
 
             <input
               placeholder="Your Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-2xl border border-white/15 bg-black/20 pl-12 pr-4 py-4 outline-none transition duration-200 focus:border-white focus:ring-1 focus:ring-white/40"
             />
           </div>
         </motion.div>
 
-        {/* MESSAGE */}
         <motion.div
           variants={fieldVariants}
           initial="hidden"
@@ -145,12 +179,13 @@ export default function ContactForm() {
             <textarea
               rows={5}
               placeholder="Your Message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
               className="w-full rounded-2xl border border-white/15 bg-black/20 pl-12 pr-4 py-4 outline-none resize-none transition duration-200 focus:border-white focus:ring-1 focus:ring-white/40"
             />
           </div>
         </motion.div>
 
-        {/* BUTTON */}
         <motion.button
           variants={fieldVariants}
           initial="hidden"
@@ -162,14 +197,30 @@ export default function ContactForm() {
             transition: { duration: 0.12 },
           }}
           whileTap={{ scale: 0.97 }}
-          className="w-full rounded-2xl py-4 bg-white/10 border border-white/10 flex items-center justify-center gap-2"
+          onClick={handleSubmit}
+          disabled={loading}
+          className="w-full rounded-2xl py-4 bg-white/10 border border-white/10 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition"
         >
           <Send size={16} />
-          Send Message
+          {loading ? 'Sending...' : 'Send Message'}
         </motion.button>
+
+        {status !== 'idle' && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className={`rounded-2xl p-3 text-sm text-center ${
+              status === 'success'
+                ? 'bg-green-500/20 border border-green-500/30 text-green-300'
+                : 'bg-red-500/20 border border-red-500/30 text-red-300'
+            }`}
+          >
+            {statusMessage}
+          </motion.div>
+        )}
       </div>
 
-      {/* SOCIAL */}
       <div className="border-t border-white/10 pt-5 mt-6">
         <motion.p
           variants={fieldVariants}
@@ -182,42 +233,7 @@ export default function ContactForm() {
           Connect With Me
         </motion.p>
 
-        {/* LINKEDIN */} 
-        <motion.a
-          href="https://www.linkedin.com/in/rifqimuhammadaliya/"  
-          target="_blank"
-          rel="noopener noreferrer"
-          variants={fieldVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: false }}
-          transition={{ delay: 0.36 }}
-          whileHover={{
-            scale: 1.05,
-            transition: { duration: 0.12 },
-          }}
-          className="group relative overflow-hidden rounded-2xl border border-white/10 bg-black/20 p-4 mb-3 flex items-center justify-between"
-        >
-          <div className="absolute inset-0 bg-white/[0.04] translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-700 ease-out" />
-
-          <div className="relative z-10 flex items-center gap-3">
-            <FaLinkedinIn />
-
-            <div>
-              <p className="text-sm font-medium">LinkedIn</p>
-              <p className="text-xs text-white/35">@linkedin</p>
-            </div>
-          </div>
-
-          <div className="relative z-10 opacity-0 group-hover:opacity-100 transition">
-            <div className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-              <ArrowUpRight size={14} />
-            </div>
-          </div>
-        </motion.a>
-
-        {/* GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {socialLinks.map((item, i) => {
             const Icon = item.icon
 

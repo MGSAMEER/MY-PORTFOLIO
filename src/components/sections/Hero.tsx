@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import App from "@/components/band/App";
 import TextType from "@/components/band/TextType";
 
-const skills = ["Typescript", "React.js", "Tailwind"];
+const skills = ["React.js", "Node.js", "MongoDB", "TypeScript", "Python"];
 
 type HeroProps = {
   showApp: boolean;
@@ -51,7 +51,6 @@ export default function Hero({ showApp }: HeroProps) {
         overflow: "hidden",
       }}
     >
-      {/* APP LAYER */}
       <div
         style={{
           position: "absolute",
@@ -63,7 +62,6 @@ export default function Hero({ showApp }: HeroProps) {
         {showApp && <App />}
       </div>
 
-      {/* TEXT */}
       <div
         className="md:max-w-[600px]"
         style={{
@@ -72,7 +70,6 @@ export default function Hero({ showApp }: HeroProps) {
           zIndex: 5,
         }}
       >
-        {/* LABEL */}
         <motion.div
           initial={false}
           animate={
@@ -92,11 +89,10 @@ export default function Hero({ showApp }: HeroProps) {
               textTransform: "uppercase",
             }}
           >
-            ✦ Available for work
+            ✦ Full Stack Developer
           </span>
         </motion.div>
 
-        {/* HEADING */}
         <div>
           <motion.h1
             initial={false}
@@ -118,7 +114,7 @@ export default function Hero({ showApp }: HeroProps) {
               marginBottom: 0,
             }}
           >
-            Frontend
+            Sameer
           </motion.h1>
 
           <motion.h1
@@ -142,11 +138,10 @@ export default function Hero({ showApp }: HeroProps) {
               marginBottom: 24,
             }}
           >
-            Developer
+            Kanade
           </motion.h1>
         </div>
 
-        {/* STATUS */}
         <motion.div
           initial={false}
           animate={startAnim ? { opacity: 1, x: 0 } : { opacity: 0, x: 40 }}
@@ -162,7 +157,11 @@ export default function Hero({ showApp }: HeroProps) {
             }}
           >
             <TextType
-              text={["Junior Programmer", "fresh Graduate", "Happy coding!"]}
+              text={[
+                "AI-powered products",
+                "Scalable systems",
+                "Impactful digital experiences",
+              ]}
               typingSpeed={75}
               pauseDuration={1500}
               showCursor
@@ -173,7 +172,6 @@ export default function Hero({ showApp }: HeroProps) {
           </span>
         </motion.div>
 
-        {/* DESC */}
         <motion.div
           initial={false}
           animate={
@@ -185,7 +183,7 @@ export default function Hero({ showApp }: HeroProps) {
           style={{
             marginBottom: 28,
             width: "100%",
-            maxWidth: 460, // batas lebar biar jadi 3 baris
+            maxWidth: 460,
           }}
         >
           <p
@@ -197,13 +195,10 @@ export default function Hero({ showApp }: HeroProps) {
               textWrap: "pretty",
             }}
           >
-            Menciptakan website modern dengan tampilan clean, responsif, dan
-            elegan. Mengubah ide dan desain menjadi pengalaman digital yang
-            menarik dan mudah digunakan.
+            Building intelligent, scalable, and impactful digital experiences.
           </p>
         </motion.div>
 
-        {/* SKILLS */}
         <motion.div
           initial="hidden"
           animate={startAnim ? "visible" : "hidden"}
@@ -246,7 +241,6 @@ export default function Hero({ showApp }: HeroProps) {
           ))}
         </motion.div>
 
-        {/* FOOTER */}
         <motion.div
           initial={false}
           animate={startAnim ? { opacity: 1, y: 0 } : { opacity: 0, y: 25 }}
@@ -264,7 +258,7 @@ export default function Hero({ showApp }: HeroProps) {
               color: "var(--text-muted)",
             }}
           >
-            ↓ explore my work below
+            ↓ Explore my work below
           </span>
 
           <span
@@ -274,11 +268,11 @@ export default function Hero({ showApp }: HeroProps) {
               color: "var(--text-muted)",
             }}
           >
-            ↗ open to full-time & freelance opportunities
+            Open to internships & full-time opportunities
           </span>
         </motion.div>
       </div>
-      {/* SCROLL INDICATOR */}
+
       <motion.div
         initial={false}
         animate={startAnim ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
@@ -296,56 +290,55 @@ export default function Hero({ showApp }: HeroProps) {
           pointerEvents: "none",
         }}
       >
-        {/* SCROLL INDICATOR */}
-<motion.div
-  initial={false}
-  animate={
-    startAnim
-      ? { opacity: 1, y: 0 }
-      : { opacity: 0, y: 40 }
-  }
-  transition={{
-    duration: 0.9,
-    delay: 1.2,
-    ease: [0.22, 1, 0.36, 1],
-  }}
-  className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 pointer-events-none w-full flex justify-center"
->
-  <motion.div
-    animate={{
-      y: [0, 6, 0],
-      opacity: [1, 0.65, 1],
-    }}
-    transition={{
-      duration: 1.4,
-      repeat: Infinity,
-      ease: 'easeInOut',
-    }}
-    className="flex items-center justify-center gap-2"
-  >
-    <span
-      style={{
-        fontFamily: "'DM Mono', monospace",
-        fontSize: 11,
-        letterSpacing: '0.2em',
-        textTransform: 'uppercase',
-        color: 'var(--text-muted)',
-      }}
-    >
-      Scroll
-    </span>
+        <motion.div
+          initial={false}
+          animate={
+            startAnim
+              ? { opacity: 1, y: 0 }
+              : { opacity: 0, y: 40 }
+          }
+          transition={{
+            duration: 0.9,
+            delay: 1.2,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 pointer-events-none w-full flex justify-center"
+        >
+          <motion.div
+            animate={{
+              y: [0, 6, 0],
+              opacity: [1, 0.65, 1],
+            }}
+            transition={{
+              duration: 1.4,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            className="flex items-center justify-center gap-2"
+          >
+            <span
+              style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: 11,
+                letterSpacing: "0.2em",
+                textTransform: "uppercase",
+                color: "var(--text-muted)",
+              }}
+            >
+              Scroll
+            </span>
 
-    <span
-      style={{
-        fontSize: 16,
-        color: 'var(--text-secondary)',
-        lineHeight: 1,
-      }}
-    >
-      ↓
-    </span>
-  </motion.div>
-</motion.div>
+            <span
+              style={{
+                fontSize: 16,
+                color: "var(--text-secondary)",
+                lineHeight: 1,
+              }}
+            >
+              ↓
+            </span>
+          </motion.div>
+        </motion.div>
       </motion.div>
     </section>
   );

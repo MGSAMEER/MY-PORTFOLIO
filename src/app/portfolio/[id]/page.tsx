@@ -20,6 +20,49 @@ import {
   Box,
 } from 'lucide-react'
 
+const fallbackProjects: Record<string, any> = {
+  'fallback-pulse-events': {
+    title: 'Pulse Events',
+    description:
+      'Pulse Events is a full-stack event management and ticketing platform designed to handle large-scale college and public events. It enables real-time booking, seamless payment processing, and efficient event coordination.',
+    technologies:
+      'React.js, TypeScript, Tailwind CSS, Node.js, Express.js, MongoDB, Razorpay / Stripe, JWT Authentication, REST APIs',
+    key_features:
+      'Real-time event ticket booking, Secure payment integration, Admin dashboard for event management, User authentication & profile management, Analytics for ticket sales and engagement, Notifications for event updates',
+    image_url: '',
+    image_urls: [],
+    live_url: 'https://pulse-event-l7zk.vercel.app/',
+    github_url: '',
+  },
+  'fallback-pc-recommendation': {
+    title: 'PC Recommendation System',
+    description:
+      'A smart recommendation system that suggests optimized PC builds based on user requirements such as budget, performance needs, and use case (gaming, development, editing).',
+    technologies:
+      'React.js, Tailwind CSS, Node.js, Express.js, MongoDB / JSON-based dataset, Rule-based + filtering algorithms',
+    key_features:
+      'Intelligent recommendation engine, Budget-based filtering, Component compatibility validation, Performance-based suggestions, Custom user input handling',
+    image_url: '',
+    image_urls: [],
+    live_url:
+      'https://pc-recommendation-system-frontend-psi.vercel.app/',
+    github_url: '',
+  },
+  'fallback-finance-ai': {
+    title: 'Finance AI',
+    description:
+      'Finance AI is an intelligent financial assistant that helps users manage expenses, analyze spending patterns, and receive AI-driven financial insights and recommendations.',
+    technologies:
+      'React.js, Tailwind CSS, Node.js, Express.js, Python (ML models / analytics logic), API-based AI integration, MongoDB',
+    key_features:
+      'Expense tracking & categorization, AI-based financial insights, Data visualization (charts & analytics), Smart recommendations for saving, Secure user authentication',
+    image_url: '',
+    image_urls: [],
+    live_url: 'https://finance-ai-theta-ten.vercel.app/',
+    github_url: '',
+  },
+}
+
 export default function PortfolioDetailPage() {
   const { id } = useParams()
   const router = useRouter()
@@ -40,27 +83,37 @@ export default function PortfolioDetailPage() {
 
   useEffect(() => {
     fetchProject()
-  }, [])
+  }, [id])
 
   const fetchProject = async () => {
+    const currentId = String(id || '')
     const { data } = await supabase
       .from('projects')
       .select('*')
-      .eq('id', id)
+      .eq('id', currentId)
       .single()
 
     if (data) {
       setProject(data)
+      return
+    }
+
+    if (fallbackProjects[currentId]) {
+      setProject(fallbackProjects[currentId])
     }
   }
 
-  const tech = (project?.technologies || '')
-    .split(',')
-    .filter((t: string) => t.trim() !== '')
+  const tech = Array.isArray(project?.technologies)
+    ? project.technologies
+    : (project?.technologies || '')
+        .split(',')
+        .filter((t: string) => t.trim() !== '')
 
-  const features = (project?.key_features || '')
-    .split(',')
-    .filter((f: string) => f.trim() !== '')
+  const features = Array.isArray(project?.key_features)
+    ? project.key_features
+    : (project?.key_features || '')
+        .split(',')
+        .filter((f: string) => f.trim() !== '')
 
   const galleryImages =
     project?.image_urls && Array.isArray(project.image_urls)

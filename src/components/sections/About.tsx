@@ -3,9 +3,6 @@
 import { useEffect, useState } from "react";
 import { motion, Variants } from "framer-motion";
 import { Code, Award, Globe, FileText, ArrowUpRight } from "lucide-react";
-import { supabase } from "@/lib/supabase";
-
-/* ================== ANIMATION ================== */
 
 const container: Variants = {
   hidden: {},
@@ -55,13 +52,8 @@ const pop: Variants = {
   },
 };
 
-/* ================== COMPONENT ================== */
-
 export default function About() {
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
-
-  const [projectCount, setProjectCount] = useState(0);
-  const [certificateCount, setCertificateCount] = useState(0);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -69,28 +61,8 @@ export default function About() {
     check();
     window.addEventListener("resize", check);
 
-    fetchStats();
-
     return () => window.removeEventListener("resize", check);
   }, []);
-
-  const fetchStats = async () => {
-    try {
-      const { count: projects } = await supabase
-        .from("projects")
-        .select("*", { count: "exact", head: true });
-
-      const { count: certificates } = await supabase
-        .from("certificates")
-        .select("*", { count: "exact", head: true });
-
-      setProjectCount(projects || 0);
-      setCertificateCount(certificates || 0);
-    } catch {
-      setProjectCount(0);
-      setCertificateCount(0);
-    }
-  };
 
   const scrollToPortfolio = () => {
     const el = document.getElementById("portfolio");
@@ -104,18 +76,24 @@ export default function About() {
   const stats = [
     {
       icon: <Code size={16} />,
-      value: String(projectCount),
-      title: "PROJECTS",
+      value: "5+",
+      title: "Projects",
+      description:
+        "Built and deployed multiple full-stack applications focusing on performance and scalability.",
     },
     {
       icon: <Award size={16} />,
-      value: String(certificateCount),
-      title: "CERTIFICATES",
+      value: "3+",
+      title: "Certifications",
+      description:
+        "Continuously learning through certifications in web development, databases, and AI technologies.",
     },
     {
       icon: <Globe size={16} />,
-      value: String(projectCount + certificateCount),
-      title: "COMPLETED WORKS",
+      value: "40+",
+      title: "Completed Works",
+      description:
+        "Worked on 5+ production-level projects and organized 40+ college events.",
     },
   ];
 
@@ -139,7 +117,6 @@ export default function About() {
             gap: "32px",
           }}
         >
-          {/* LEFT */}
           <motion.div
             variants={container}
             initial="hidden"
@@ -172,9 +149,9 @@ export default function About() {
                   color: "var(--text-primary)",
                 }}
               >
-                <div>Rifqi</div>
-                <div>Muhammad</div>
-                <div>Aliya</div>
+                <div>A bit</div>
+                <div>about</div>
+                <div>myself</div>
               </div>
             </motion.div>
 
@@ -198,13 +175,38 @@ export default function About() {
                 maxWidth: isMobile ? "100%" : "490px",
               }}
             >
-              Fresh Graduate SMK Rekayasa Perangkat Lunak lulusan 2026 dengan
-              passion di bidang frontend development dan UI modern. Berfokus
-              pada pembuatan website clean, responsif, dan visual yang kuat
-              untuk menghadirkan pengalaman digital yang optimal.
+              I’m a passionate Full Stack Developer and final-year student
+              specializing in modern web technologies like React, Node.js, and
+              MongoDB. I enjoy building scalable applications and integrating
+              AI-driven solutions to solve real-world problems.
             </motion.p>
 
-            {/* QUOTE */}
+            <motion.p
+              variants={{
+                hidden: { opacity: 0, y: 40 },
+                show: {
+                  opacity: 1,
+                  y: 0,
+                  transition: {
+                    duration: 1.1,
+                    delay: 0.3,
+                  },
+                },
+              }}
+              style={{
+                marginTop: 16,
+                fontSize: 14,
+                color: "var(--text-secondary)",
+                lineHeight: 1.75,
+                maxWidth: isMobile ? "100%" : "490px",
+              }}
+            >
+              Beyond development, I have organized 40+ college events, leading
+              teams and managing large-scale operations. This has strengthened
+              my leadership, communication, and execution skills alongside my
+              technical expertise.
+            </motion.p>
+
             <motion.div
               variants={{
                 hidden: { opacity: 0, scale: 0.94 },
@@ -213,7 +215,7 @@ export default function About() {
                   scale: 1,
                   transition: {
                     duration: 0.9,
-                    delay: 0.3,
+                    delay: 0.35,
                   },
                 },
               }}
@@ -229,11 +231,10 @@ export default function About() {
                 width: "fit-content",
               }}
             >
-              “Turning ideas into clean, modern, and meaningful digital
-              experiences.”
+              “Turning ideas into intelligent, scalable, and user-focused
+              digital solutions.”
             </motion.div>
 
-            {/* BUTTONS */}
             <motion.div
               variants={fadeUp}
               style={{
@@ -243,9 +244,8 @@ export default function About() {
                 flexWrap: "wrap",
               }}
             >
-              {/* DOWNLOAD CV */}
               <a
-                href="https://drive.google.com/file/d/1cFqZ0TY0U0I51K0Tchv8E4sbOv5yAZ9x/view?usp=drive_link"
+                href="https://drive.google.com/file/d/1LRPlEtRE5_OQFf2pleDsZqYiRfUPRWba/view?usp=drivesdk"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ textDecoration: "none" }}
@@ -276,11 +276,10 @@ export default function About() {
                   }}
                 >
                   <FileText size={14} />
-                  Download CV
+                  Download Resume
                 </button>
               </a>
 
-              {/* VIEW PROJECTS */}
               <button
                 onClick={scrollToPortfolio}
                 style={{
@@ -313,7 +312,6 @@ export default function About() {
             </motion.div>
           </motion.div>
 
-          {/* IMAGE */}
           {!isMobile && (
             <motion.div
               variants={slideLeft}
@@ -336,7 +334,7 @@ export default function About() {
               >
                 <img
                   src="/assets/PP.png"
-                  alt="Profile"
+                  alt="Sameer Kanade"
                   style={{
                     width: 240,
                     height: 240,
@@ -350,7 +348,6 @@ export default function About() {
           )}
         </div>
 
-        {/* CARDS */}
         <motion.div
           variants={container}
           initial="hidden"
@@ -406,11 +403,25 @@ export default function About() {
 
               <div
                 style={{
-                  fontSize: 11,
+                  fontSize: 13,
                   letterSpacing: "0.08em",
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  marginTop: 8,
                 }}
               >
                 {item.title}
+              </div>
+
+              <div
+                style={{
+                  marginTop: 10,
+                  fontSize: 13,
+                  lineHeight: 1.65,
+                  color: "var(--text-secondary)",
+                }}
+              >
+                {item.description}
               </div>
 
               <div

@@ -199,7 +199,7 @@ export default function WelcomeScreen() {
     color: 'rgba(255,255,255,0.7)',
   }}
 >
-  www.rifqi.vercel.app
+  sameer.dev
 </motion.div>
       </motion.div>
     </div>
